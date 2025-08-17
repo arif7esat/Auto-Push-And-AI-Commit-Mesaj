@@ -1,9 +1,4 @@
 
-# AutoCommit Pro (Completely Hidden)
-.autocommit-pro/
-autocommit
-AUTOCOMMIT-README.md
-
 # Logs and temporary files
 *.log
 logs/
