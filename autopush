@@ -2,27 +2,43 @@
 
 # AutoPush - Ana Kontrol Scripti
 # Kullanım: ./autopush [start|stop|status|restart]
+# Mevcut dizindeki .git repository ile çalışır
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+SCRIPTS_DIR="$SCRIPT_DIR/autopush-scripts"
+
+# Scripts klasörü var mı kontrol et
+if [ ! -d "$SCRIPTS_DIR" ]; then
+    echo "❌ HATA: autopush-scripts klasörü bulunamadı!"
+    exit 1
+fi
+
+# Mevcut dizinde .git'i kontrol et
+if [ ! -d ".git" ]; then
+    echo "❌ HATA: Bu dizinde .git repository bulunamadı!"
+    echo "Mevcut dizin: $SCRIPT_DIR"
+    exit 1
+fi
+
+echo "📁 Git repository dizini: $SCRIPT_DIR"
 
 case "$1" in
     start)
         echo "AutoPush başlatılıyor..."
-        ./start_autopush.sh
+        "$SCRIPTS_DIR/start_autopush.sh"
         ;;
     stop)
         echo "AutoPush durduruluyor..."
-        ./stop_autopush.sh
+        "$SCRIPTS_DIR/stop_autopush.sh"
         ;;
     status)
-        ./status_autopush.sh
+        "$SCRIPTS_DIR/status_autopush.sh"
         ;;
     restart)
         echo "AutoPush yeniden başlatılıyor..."
-        ./stop_autopush.sh
+        "$SCRIPTS_DIR/stop_autopush.sh"
         sleep 2
-        ./start_autopush.sh
+        "$SCRIPTS_DIR/start_autopush.sh"
         ;;
     *)
         echo "AutoPush - Basit Otomatik Git Push Sistemi"
@@ -42,5 +58,8 @@ case "$1" in
         echo "  - Terminal kapansa bile çalışmaya devam eder"
         echo "  - Log tutar (program_log)"
         echo "  - PID bilgisini saklar (autopush.pid)"
+        echo "  - Mevcut dizindeki .git ile çalışır"
+        echo ""
+        echo "Git Repository: $SCRIPT_DIR"
         ;;
 esac

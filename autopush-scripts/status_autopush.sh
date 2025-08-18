@@ -1,9 +1,13 @@
 #!/bin/bash
 
 # AutoPush Durum Kontrolü
+# Mevcut dizindeki .git repository ile çalışır
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Ana dizine git (git repository'nin olduğu yer)
+cd "$PARENT_DIR"
 
 echo "=== AutoPush Durum Kontrolü ==="
 
@@ -41,6 +45,7 @@ echo ""
 echo "=== Git Durumu ==="
 if [ -d ".git" ]; then
     echo "Git repository: ✅"
+    echo "Repository dizini: $PARENT_DIR"
     echo "Mevcut branch: $(git branch --show-current)"
     echo "Backup branch: $(git branch | grep Backup || echo 'Bulunamadı')"
 else

@@ -2,6 +2,14 @@
 
 # AutoPush - Basit Otomatik Git Push Sistemi
 # 10 dakikada bir backup branch'e push yapar
+# Mevcut dizindeki .git repository ile çalışır
+
+# Script dizinini al ve ana dizine git
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Ana dizine git (git repository'nin olduğu yer)
+cd "$PARENT_DIR"
 
 # Log dosyası
 LOG_FILE="program_log"
@@ -15,6 +23,7 @@ log_message() {
 # PID'i log dosyasına kaydet
 echo $$ > "$PID_FILE"
 log_message "AutoPush başlatıldı. PID: $$"
+log_message "Git repository dizini: $PARENT_DIR"
 
 # Ana döngü
 while true; do

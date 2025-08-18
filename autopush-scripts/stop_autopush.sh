@@ -1,9 +1,13 @@
 #!/bin/bash
 
 # AutoPush Durdurucu
+# Mevcut dizindeki .git repository ile çalışır
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Ana dizine git (git repository'nin olduğu yer)
+cd "$PARENT_DIR"
 
 echo "=== AutoPush Durdurma ==="
 
