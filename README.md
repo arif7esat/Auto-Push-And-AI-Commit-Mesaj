@@ -9,10 +9,11 @@ Bu proje, 10 dakikada bir otomatik olarak git repository'nizi Backup branch'ine 
 - ✅ **Backup branch yoksa otomatik oluşturur**
 - ✅ **Arka planda çalışır** (daemon)
 - ✅ **Terminal kapansa bile çalışmaya devam eder**
-- ✅ **Log tutar** (`program_log` dosyasında)
-- ✅ **PID bilgisini saklar** (`autopush.pid` dosyasında)
+- ✅ **Log tutar** (`autopush-scripts/logs/program_log` dosyasında)
+- ✅ **PID bilgisini saklar** (`autopush-scripts/logs/autopush.pid` dosyasında)
 - ✅ **Basit commit mesajı**: "backup successful"
 - ✅ **Düzenli klasör yapısı** (scriptler `autopush-scripts/` klasöründe)
+- ✅ **Logs klasörü** (tüm log ve PID dosyaları tek yerde)
 - ❌ **AI commit mesajları yok**
 - ❌ **Gemini API yok**
 - ❌ **Karmaşık özellikler yok**
@@ -65,9 +66,10 @@ Auto-Push-And-AI-Commit-Mesaj/
 │   ├── autopush.sh            # Ana AutoPush scripti (daemon)
 │   ├── start_autopush.sh      # Başlatma scripti
 │   ├── stop_autopush.sh       # Durdurma scripti
-│   └── status_autopush.sh     # Durum kontrol scripti
-├── program_log                 # Log dosyası (otomatik oluşur)
-├── autopush.pid               # PID dosyası (otomatik oluşur)
+│   ├── status_autopush.sh     # Durum kontrol scripti
+│   └── logs/                  # Logs klasörü
+│       ├── program_log        # Log dosyası
+│       └── autopush.pid      # PID dosyası
 ├── .git/                      # Git repository
 └── README.md                  # Bu dosya
 ```
@@ -100,7 +102,7 @@ Auto-Push-And-AI-Commit-Mesaj/
 
 ### Log dosyasını kontrol et
 ```bash
-tail -f program_log
+tail -f autopush-scripts/logs/program_log
 ```
 
 ### Process'i zorla durdur
@@ -115,6 +117,8 @@ Bu sistem sadece basit backup amaçlıdır. Production ortamında kullanmadan ö
 ## Avantajlar
 
 - **Düzenli yapı**: Tüm scriptler `autopush-scripts/` klasöründe
+- **Logs klasörü**: Tüm log ve PID dosyaları `autopush-scripts/logs/` klasöründe
 - **Kolay bakım**: Scriptleri ayrı klasörde tutmak bakımı kolaylaştırır
 - **Temiz ana dizin**: Ana dizinde sadece gerekli dosyalar
 - **Modüler yapı**: Her script kendi görevini yerine getirir
+- **Merkezi log yönetimi**: Tüm loglar tek klasörde

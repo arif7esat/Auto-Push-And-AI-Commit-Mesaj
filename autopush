@@ -4,62 +4,74 @@
 # Kullanım: ./autopush [start|stop|status|restart]
 # Mevcut dizindeki .git repository ile çalışır
 
+# Renk kodları
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_DIR="$SCRIPT_DIR/autopush-scripts"
 
 # Scripts klasörü var mı kontrol et
 if [ ! -d "$SCRIPTS_DIR" ]; then
-    echo "❌ HATA: autopush-scripts klasörü bulunamadı!"
+    echo -e "${RED}❌ HATA: autopush-scripts klasörü bulunamadı!${NC}"
     exit 1
 fi
 
 # Mevcut dizinde .git'i kontrol et
 if [ ! -d ".git" ]; then
-    echo "❌ HATA: Bu dizinde .git repository bulunamadı!"
+    echo -e "${RED}❌ HATA: Bu dizinde .git repository bulunamadı!${NC}"
     echo "Mevcut dizin: $SCRIPT_DIR"
     exit 1
 fi
 
-echo "📁 Git repository dizini: $SCRIPT_DIR"
+echo -e "${CYAN}📁 Git repository dizini: ${WHITE}$SCRIPT_DIR${NC}"
 
 case "$1" in
     start)
-        echo "AutoPush başlatılıyor..."
+        echo -e "${GREEN}🚀 AutoPush başlatılıyor...${NC}"
         "$SCRIPTS_DIR/start_autopush.sh"
         ;;
     stop)
-        echo "AutoPush durduruluyor..."
+        echo -e "${YELLOW}⏹️  AutoPush durduruluyor...${NC}"
         "$SCRIPTS_DIR/stop_autopush.sh"
         ;;
     status)
         "$SCRIPTS_DIR/status_autopush.sh"
         ;;
     restart)
-        echo "AutoPush yeniden başlatılıyor..."
+        echo -e "${PURPLE}🔄 AutoPush yeniden başlatılıyor...${NC}"
         "$SCRIPTS_DIR/stop_autopush.sh"
         sleep 2
         "$SCRIPTS_DIR/start_autopush.sh"
         ;;
     *)
-        echo "AutoPush - Basit Otomatik Git Push Sistemi"
+        echo -e "${CYAN}╔══════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${CYAN}║                    ${WHITE}AutoPush${CYAN} - Basit Otomatik Git Push Sistemi${NC}"
+        echo -e "${CYAN}╚══════════════════════════════════════════════════════════════╝${NC}"
         echo ""
-        echo "Kullanım: $0 [start|stop|status|restart]"
+        echo -e "${WHITE}Kullanım: ${CYAN}$0 [start|stop|status|restart]${NC}"
         echo ""
-        echo "Komutlar:"
-        echo "  start   - AutoPush'ı başlat"
-        echo "  stop    - AutoPush'ı durdur"
-        echo "  status  - Durumu kontrol et"
-        echo "  restart - AutoPush'ı yeniden başlat"
+        echo -e "${YELLOW}📋 Komutlar:${NC}"
+        echo -e "  ${GREEN}start${NC}   - AutoPush'ı başlat"
+        echo -e "  ${YELLOW}stop${NC}    - AutoPush'ı durdur"
+        echo -e "  ${BLUE}status${NC}  - Durumu kontrol et"
+        echo -e "  ${PURPLE}restart${NC} - AutoPush'ı yeniden başlat"
         echo ""
-        echo "Özellikler:"
-        echo "  - 10 dakikada bir otomatik push"
-        echo "  - Backup branch'e push yapar"
-        echo "  - Arka planda çalışır"
-        echo "  - Terminal kapansa bile çalışmaya devam eder"
-        echo "  - Log tutar (program_log)"
-        echo "  - PID bilgisini saklar (autopush.pid)"
-        echo "  - Mevcut dizindeki .git ile çalışır"
+        echo -e "${YELLOW}✨ Özellikler:${NC}"
+        echo -e "  - ${GREEN}10 dakikada bir otomatik push${NC}"
+        echo -e "  - ${GREEN}Backup branch'e push yapar${NC}"
+        echo -e "  - ${GREEN}Arka planda çalışır${NC}"
+        echo -e "  - ${GREEN}Terminal kapansa bile çalışmaya devam eder${NC}"
+        echo -e "  - ${GREEN}Log tutar${NC} (${CYAN}autopush-scripts/logs/program_log${NC})"
+        echo -e "  - ${GREEN}PID bilgisini saklar${NC} (${CYAN}autopush-scripts/logs/autopush.pid${NC})"
+        echo -e "  - ${GREEN}Mevcut dizindeki .git ile çalışır${NC}"
         echo ""
-        echo "Git Repository: $SCRIPT_DIR"
+        echo -e "${CYAN}📁 Git Repository: ${WHITE}$SCRIPT_DIR${NC}"
         ;;
 esac
