@@ -12,6 +12,7 @@ Bu proje, 10 dakikada bir otomatik olarak git repository'nizi Backup branch'ine 
 - ✅ **Log tutar** (`program_log` dosyasında)
 - ✅ **PID bilgisini saklar** (`autopush.pid` dosyasında)
 - ✅ **Basit commit mesajı**: "backup successful"
+- ✅ **Düzenli klasör yapısı** (scriptler `autopush-scripts/` klasöründe)
 - ❌ **AI commit mesajları yok**
 - ❌ **Gemini API yok**
 - ❌ **Karmaşık özellikler yok**
@@ -20,7 +21,7 @@ Bu proje, 10 dakikada bir otomatik olarak git repository'nizi Backup branch'ine 
 
 1. Scriptleri çalıştırılabilir yapın:
 ```bash
-chmod +x autopush autopush.sh start_autopush.sh stop_autopush.sh status_autopush.sh
+chmod +x autopush autopush-scripts/*.sh
 ```
 
 2. Git repository'nizde olduğunuzdan emin olun:
@@ -57,13 +58,19 @@ git status
 
 ## Dosya Yapısı
 
-- `autopush` - Ana kontrol scripti
-- `autopush.sh` - Ana AutoPush scripti (daemon)
-- `start_autopush.sh` - Başlatma scripti
-- `stop_autopush.sh` - Durdurma scripti
-- `status_autopush.sh` - Durum kontrol scripti
-- `program_log` - Log dosyası (otomatik oluşur)
-- `autopush.pid` - PID dosyası (otomatik oluşur)
+```
+Auto-Push-And-AI-Commit-Mesaj/
+├── autopush                    # Ana kontrol scripti
+├── autopush-scripts/           # Script klasörü
+│   ├── autopush.sh            # Ana AutoPush scripti (daemon)
+│   ├── start_autopush.sh      # Başlatma scripti
+│   ├── stop_autopush.sh       # Durdurma scripti
+│   └── status_autopush.sh     # Durum kontrol scripti
+├── program_log                 # Log dosyası (otomatik oluşur)
+├── autopush.pid               # PID dosyası (otomatik oluşur)
+├── .git/                      # Git repository
+└── README.md                  # Bu dosya
+```
 
 ## Nasıl Çalışır
 
@@ -104,3 +111,10 @@ tail -f program_log
 ## Not
 
 Bu sistem sadece basit backup amaçlıdır. Production ortamında kullanmadan önce test edin.
+
+## Avantajlar
+
+- **Düzenli yapı**: Tüm scriptler `autopush-scripts/` klasöründe
+- **Kolay bakım**: Scriptleri ayrı klasörde tutmak bakımı kolaylaştırır
+- **Temiz ana dizin**: Ana dizinde sadece gerekli dosyalar
+- **Modüler yapı**: Her script kendi görevini yerine getirir
