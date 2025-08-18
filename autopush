@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# AutoPush - Ana Kontrol Scripti
+# Kullanım: ./autopush [start|stop|status|restart]
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+case "$1" in
+    start)
+        echo "AutoPush başlatılıyor..."
+        ./start_autopush.sh
+        ;;
+    stop)
+        echo "AutoPush durduruluyor..."
+        ./stop_autopush.sh
+        ;;
+    status)
+        ./status_autopush.sh
+        ;;
+    restart)
+        echo "AutoPush yeniden başlatılıyor..."
+        ./stop_autopush.sh
+        sleep 2
+        ./start_autopush.sh
+        ;;
+    *)
+        echo "AutoPush - Basit Otomatik Git Push Sistemi"
+        echo ""
+        echo "Kullanım: $0 [start|stop|status|restart]"
+        echo ""
+        echo "Komutlar:"
+        echo "  start   - AutoPush'ı başlat"
+        echo "  stop    - AutoPush'ı durdur"
+        echo "  status  - Durumu kontrol et"
+        echo "  restart - AutoPush'ı yeniden başlat"
+        echo ""
+        echo "Özellikler:"
+        echo "  - 10 dakikada bir otomatik push"
+        echo "  - Backup branch'e push yapar"
+        echo "  - Arka planda çalışır"
+        echo "  - Terminal kapansa bile çalışmaya devam eder"
+        echo "  - Log tutar (program_log)"
+        echo "  - PID bilgisini saklar (autopush.pid)"
+        ;;
+esac
