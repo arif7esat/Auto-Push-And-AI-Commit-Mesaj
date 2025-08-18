@@ -44,6 +44,8 @@ else
     SLEEP_TIME=600  # 10 dakika (normal)
 fi
 
+
+
 # Sistem verimi ölçme fonksiyonu
 get_system_stats() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
@@ -184,11 +186,17 @@ while true; do
         create_performance_report
     fi
     
-    # Bekleme süresi
-    if [ "$TEST_MODE" = "1" ]; then
-        echo -e "${YELLOW}⏰ 1 dakika bekleniyor (TEST MODU)...${NC}"
+    # Git işlemlerinden sonra kalan süreyi hesapla ve bekle
+    local remaining_time=$((SLEEP_TIME - loop_duration))
+    
+    if [ $remaining_time -gt 0 ]; then
+        if [ "$TEST_MODE" = "1" ]; then
+            echo -e "${YELLOW}⏰ $remaining_time saniye bekleniyor (TEST MODU)...${NC}"
+        else
+            echo -e "${BLUE}⏰ $remaining_time saniye bekleniyor...${NC}"
+        fi
+        sleep $remaining_time
     else
-        echo -e "${BLUE}⏰ 10 dakika bekleniyor...${NC}"
+        echo -e "${YELLOW}⚠️  Git işlemleri çok uzun sürdü (${loop_duration}s), hemen devam ediliyor...${NC}"
     fi
-    sleep $SLEEP_TIME
 done
