@@ -7,13 +7,17 @@
 # Script dizinini al ve ana dizine git
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+LOGS_DIR="$SCRIPT_DIR/logs"
 
 # Ana dizine git (git repository'nin olduğu yer)
 cd "$PARENT_DIR"
 
+# Logs klasörünü oluştur (eğer yoksa)
+mkdir -p "$LOGS_DIR"
+
 # Log dosyası
-LOG_FILE="program_log"
-PID_FILE="autopush.pid"
+LOG_FILE="$LOGS_DIR/program_log"
+PID_FILE="$LOGS_DIR/autopush.pid"
 
 # Log fonksiyonu
 log_message() {
@@ -24,6 +28,7 @@ log_message() {
 echo $$ > "$PID_FILE"
 log_message "AutoPush başlatıldı. PID: $$"
 log_message "Git repository dizini: $PARENT_DIR"
+log_message "Logs klasörü: $LOGS_DIR"
 
 # Ana döngü
 while true; do

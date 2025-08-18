@@ -5,6 +5,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+LOGS_DIR="$SCRIPT_DIR/logs"
 
 # Ana dizine git (git repository'nin olduğu yer)
 cd "$PARENT_DIR"
@@ -12,9 +13,9 @@ cd "$PARENT_DIR"
 echo "=== AutoPush Durum Kontrolü ==="
 
 # PID dosyası var mı?
-if [ -f "autopush.pid" ]; then
-    PID=$(cat autopush.pid)
-    echo "PID dosyası: autopush.pid"
+if [ -f "$LOGS_DIR/autopush.pid" ]; then
+    PID=$(cat "$LOGS_DIR/autopush.pid")
+    echo "PID dosyası: $LOGS_DIR/autopush.pid"
     echo "PID: $PID"
     
     # Process çalışıyor mu?
@@ -26,15 +27,15 @@ if [ -f "autopush.pid" ]; then
         ps -p $PID -o pid,ppid,cmd,etime
         
         # Log dosyası son satırları
-        if [ -f "program_log" ]; then
+        if [ -f "$LOGS_DIR/program_log" ]; then
             echo ""
             echo "Son log kayıtları:"
-            tail -5 program_log
+            tail -5 "$LOGS_DIR/program_log"
         fi
     else
         echo "❌ AutoPush çalışmıyor (PID: $PID)"
         echo "Eski PID dosyası temizleniyor..."
-        rm -f autopush.pid
+        rm -f "$LOGS_DIR/autopush.pid"
     fi
 else
     echo "❌ PID dosyası bulunamadı"

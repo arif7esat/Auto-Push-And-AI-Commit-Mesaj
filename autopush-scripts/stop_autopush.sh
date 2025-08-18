@@ -5,6 +5,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+LOGS_DIR="$SCRIPT_DIR/logs"
 
 # Ana dizine git (git repository'nin olduğu yer)
 cd "$PARENT_DIR"
@@ -12,8 +13,8 @@ cd "$PARENT_DIR"
 echo "=== AutoPush Durdurma ==="
 
 # PID dosyası var mı?
-if [ -f "autopush.pid" ]; then
-    PID=$(cat autopush.pid)
+if [ -f "$LOGS_DIR/autopush.pid" ]; then
+    PID=$(cat "$LOGS_DIR/autopush.pid")
     echo "PID: $PID"
     
     # Process çalışıyor mu?
@@ -31,11 +32,11 @@ if [ -f "autopush.pid" ]; then
         echo "✅ AutoPush durduruldu"
         
         # PID dosyasını temizle
-        rm -f autopush.pid
+        rm -f "$LOGS_DIR/autopush.pid"
         echo "PID dosyası temizlendi"
     else
         echo "❌ AutoPush zaten çalışmıyor"
-        rm -f autopush.pid
+        rm -f "$LOGS_DIR/autopush.pid"
     fi
 else
     echo "❌ PID dosyası bulunamadı"
