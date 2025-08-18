@@ -28,6 +28,15 @@ mkdir -p "$LOGS_DIR"
 LOG_FILE="$LOGS_DIR/program_log"
 PID_FILE="$LOGS_DIR/autopush.pid"
 
+# Test modu kontrolü (TEST_MODE=1 yaparak 1 dakikada bir test edebilirsiniz)
+TEST_MODE=${TEST_MODE:-0}
+if [ "$TEST_MODE" = "1" ]; then
+    SLEEP_TIME=60  # 1 dakika (test için)
+    echo -e "${YELLOW}⚠️  TEST MODU AKTİF: 1 dakikada bir push yapılacak!${NC}"
+else
+    SLEEP_TIME=600  # 10 dakika (normal)
+fi
+
 # Log fonksiyonu
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE"
@@ -38,12 +47,22 @@ echo $$ > "$PID_FILE"
 log_message "AutoPush başlatıldı. PID: $$"
 log_message "Git repository dizini: $PARENT_DIR"
 log_message "Logs klasörü: $LOGS_DIR"
+if [ "$TEST_MODE" = "1" ]; then
+    log_message "TEST MODU: $SLEEP_TIME saniyede bir push"
+else
+    log_message "NORMAL MOD: $SLEEP_TIME saniyede bir push"
+fi
 
 echo -e "${GREEN}🚀 AutoPush başlatıldı!${NC}"
 echo -e "${WHITE}📊 Başlangıç bilgileri:${NC}"
 echo -e "  ${CYAN}PID:${NC} ${WHITE}$$${NC}"
 echo -e "  ${CYAN}Git Repository:${NC} ${WHITE}$PARENT_DIR${NC}"
 echo -e "  ${CYAN}Logs Klasörü:${NC} ${WHITE}$LOGS_DIR${NC}"
+if [ "$TEST_MODE" = "1" ]; then
+    echo -e "  ${YELLOW}Test Modu:${NC} ${WHITE}1 dakikada bir push${NC}"
+else
+    echo -e "  ${CYAN}Normal Mod:${NC} ${WHITE}10 dakikada bir push${NC}"
+fi
 
 # Ana döngü
 while true; do
@@ -80,7 +99,11 @@ while true; do
         echo -e "${RED}❌ Push hatası oluştu${NC}"
     fi
     
-    # 10 dakika bekle (600 saniye)
-    echo -e "${BLUE}⏰ 10 dakika bekleniyor...${NC}"
-    sleep 600
+    # Bekleme süresi
+    if [ "$TEST_MODE" = "1" ]; then
+        echo -e "${YELLOW}⏰ 1 dakika bekleniyor (TEST MODU)...${NC}"
+    else
+        echo -e "${BLUE}⏰ 10 dakika bekleniyor...${NC}"
+    fi
+    sleep $SLEEP_TIME
 done

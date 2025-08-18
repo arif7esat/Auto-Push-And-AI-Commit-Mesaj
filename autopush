@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # AutoPush - Ana Kontrol Scripti
-# Kullanım: ./autopush [start|stop|status|restart]
+# Kullanım: ./autopush [start|stop|status|restart|test]
 # Mevcut dizindeki .git repository ile çalışır
 
 # Renk kodları
@@ -37,6 +37,11 @@ case "$1" in
         echo -e "${GREEN}🚀 AutoPush başlatılıyor...${NC}"
         "$SCRIPTS_DIR/start_autopush.sh"
         ;;
+    test)
+        echo -e "${YELLOW}🧪 AutoPush TEST MODU'nda başlatılıyor...${NC}"
+        echo -e "${YELLOW}⚠️  DİKKAT: 1 dakikada bir push yapılacak!${NC}"
+        TEST_MODE=1 "$SCRIPTS_DIR/start_autopush.sh"
+        ;;
     stop)
         echo -e "${YELLOW}⏹️  AutoPush durduruluyor...${NC}"
         "$SCRIPTS_DIR/stop_autopush.sh"
@@ -55,10 +60,11 @@ case "$1" in
         echo -e "${CYAN}║                    ${WHITE}AutoPush${CYAN} - Basit Otomatik Git Push Sistemi${NC}"
         echo -e "${CYAN}╚══════════════════════════════════════════════════════════════╝${NC}"
         echo ""
-        echo -e "${WHITE}Kullanım: ${CYAN}$0 [start|stop|status|restart]${NC}"
+        echo -e "${WHITE}Kullanım: ${CYAN}$0 [start|stop|status|restart|test]${NC}"
         echo ""
         echo -e "${YELLOW}📋 Komutlar:${NC}"
-        echo -e "  ${GREEN}start${NC}   - AutoPush'ı başlat"
+        echo -e "  ${GREEN}start${NC}   - AutoPush'ı başlat (10 dakikada bir)"
+        echo -e "  ${YELLOW}test${NC}    - AutoPush'ı TEST MODU'nda başlat (1 dakikada bir)"
         echo -e "  ${YELLOW}stop${NC}    - AutoPush'ı durdur"
         echo -e "  ${BLUE}status${NC}  - Durumu kontrol et"
         echo -e "  ${PURPLE}restart${NC} - AutoPush'ı yeniden başlat"
@@ -71,6 +77,7 @@ case "$1" in
         echo -e "  - ${GREEN}Log tutar${NC} (${CYAN}autopush-scripts/logs/program_log${NC})"
         echo -e "  - ${GREEN}PID bilgisini saklar${NC} (${CYAN}autopush-scripts/logs/autopush.pid${NC})"
         echo -e "  - ${GREEN}Mevcut dizindeki .git ile çalışır${NC}"
+        echo -e "  - ${YELLOW}Test modu${NC} (1 dakikada bir push için)"
         echo ""
         echo -e "${CYAN}📁 Git Repository: ${WHITE}$SCRIPT_DIR${NC}"
         ;;

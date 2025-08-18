@@ -18,6 +18,9 @@ SCRIPTS_DIR="$SCRIPT_DIR"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 LOGS_DIR="$SCRIPT_DIR/logs"
 
+# Test modu kontrolü
+TEST_MODE=${TEST_MODE:-0}
+
 # Ana dizine git (git repository'nin olduğu yer)
 cd "$PARENT_DIR"
 
@@ -38,7 +41,13 @@ fi
 
 # AutoPush'ı arka planda başlat
 echo -e "${CYAN}🚀 AutoPush arka planda başlatılıyor...${NC}"
-nohup "$SCRIPTS_DIR/autopush.sh" > /dev/null 2>&1 &
+if [ "$TEST_MODE" = "1" ]; then
+    echo -e "${YELLOW}⚠️  TEST MODU: 1 dakikada bir push yapılacak!${NC}"
+    TEST_MODE=1 nohup "$SCRIPTS_DIR/autopush.sh" > /dev/null 2>&1 &
+else
+    echo -e "${CYAN}📅 NORMAL MOD: 10 dakikada bir push yapılacak${NC}"
+    nohup "$SCRIPTS_DIR/autopush.sh" > /dev/null 2>&1 &
+fi
 
 # PID'i al ve log'a kaydet
 sleep 1
@@ -50,6 +59,11 @@ if [ -f "$LOGS_DIR/autopush.pid" ]; then
     echo -e "  ${CYAN}Log dosyası:${NC} ${WHITE}$LOGS_DIR/program_log${NC}"
     echo -e "  ${CYAN}PID dosyası:${NC} ${WHITE}$LOGS_DIR/autopush.pid${NC}"
     echo -e "  ${CYAN}Git Repository:${NC} ${WHITE}$PARENT_DIR${NC}"
+    if [ "$TEST_MODE" = "1" ]; then
+        echo -e "  ${YELLOW}Test Modu:${NC} ${WHITE}1 dakikada bir push${NC}"
+    else
+        echo -e "  ${CYAN}Normal Mod:${NC} ${WHITE}10 dakikada bir push${NC}"
+    fi
 else
     echo -e "${RED}❌ HATA: AutoPush başlatılamadı!${NC}"
     exit 1
